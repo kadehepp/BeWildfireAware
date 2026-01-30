@@ -1,28 +1,141 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ================= ROOT ================= */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #ffffff;
+  color: #3b0000;
+}
+
+/* ================= LAYOUT ================= */
+
+.dashboard-container {
+  min-height: 100vh;
+  padding: 1.5rem;
+  background-color: darkgray;
+}
+
+
+/* ================= HEADINGS ================= */
+
+.dashboard-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.dashboard-heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.dashboard-subheading {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* ================= SECTIONS ================= */
+
+.DispatchArea-section,
+.status-section,
+.FDRA-section {
+  color: rgb(0, 0, 0);
+  margin-bottom: 3rem;
+}
+
+.record-count {
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* ================= CARDS ================= */
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  color: black;
+}
+
+
+.area-card {
+  background-color: #b0d7ff;
+  border: 5px solid red;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+/* ================= STATUS ================= */
+
+.status-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  border-radius: 20px;
+  border: 4px solid red;
+  background-color: darkred;
+}
+
+
+.status-card {
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid;
+}
+
+.status-success {
+  background-color: #79ffc0;
+  border-color: #00ff5e;
+}
+
+.status-error {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.status-text-success {
+  color: #15803d;
+  font-weight: 600;
+  font-size: large;
+}
+
+.status-text-error {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.status-DispatchArea,
+.status-FDRA {
+  font-size: larger;
+  margin-top: 0.5rem;
+  font-weight: 700;
+
+}
+
+/* ================= ERROR ================= */
+
+.error-message {
+  background-color: #e67171;
+  border: 1px solid #fca5a5;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.error-title {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.error-body {
+  color: #b91c1c;
+}
+
+/* ================= UTIL ================= */
+
+p {
+  margin: 0.25rem 0;
 }
 
 /* app/globals.css - Add these custom classes */
