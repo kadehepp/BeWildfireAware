@@ -1,24 +1,72 @@
-'use server'
+'use server'//
 
 import { supabase } from '@/lib/supabase'
 import AddDispatchForm from './components/AddDispatchForm'
+import AddFDRAForm from './components/AddFDRAForm.jsx'
 
 //USE LATER
 // import DispatchAreasSection from './components/DispatchAreasSection'
 // import FdraSection from './components/FdraSection'
 // import StatusSection from './components/StatusSection'
 
+//need new function to add to database
 export async function addDispatchArea(formData) {
+  //form to insert data into supabase table DispatchArea
   const dispatchName = formData.get('dispatchName')
+  //const fdraId = formData.get('FDRA_ID')
+
   
   if (!dispatchName || dispatchName.trim() === '') {
     return { error: 'Dispatch name is required' }
   }
 
+  // if (!fdraId || isNaN(Number(fdraId))) {
+  //   return { error: 'Valid FDRA ID is required' }
+  // }
+
   const { data, error } = await supabase
     .from('DispatchArea')
     .insert([{ DispatchName: dispatchName }])
-    .select('Dispatch_ID, DispatchName, FDRA_ID')
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  return { success: true, data }
+}
+
+//function to add FDRA data to database
+export async function addFDRAData(formData) {
+  const FDRAname = formData.get('FDRAname')
+  const BI = formData.get('BI')
+  const ERC = formData.get('ERC')
+  const dispatchId = formData.get('dispatchId')
+
+  if (!FDRAname || FDRAname.trim() === '') {
+    return { error: 'FDRA name is required' }
+  }
+
+  if (BI === '' || BI === null || (BI !== '' && isNaN(Number(BI)))) {
+    return { error: 'Valid BI is required' }
+  }
+
+  if (ERC === '' || ERC === null || (ERC !== '' && isNaN(Number(ERC)))) {
+    return { error: 'Valid ERC is required' }
+  }
+
+  if (!dispatchId || isNaN(Number(dispatchId))) {
+    return { error: 'Dispatch area is required' }
+  }
+
+  const { data, error } = await supabase
+    .from('FDRA')
+    .insert([{ 
+      FDRAname: FDRAname, 
+      ...(BI && { BI: Number(BI) }),
+      ...(ERC && { ERC: Number(ERC) }),
+      Dispatch_ID: Number(dispatchId) 
+    }])
+
 
   if (error) {
     return { error: error.message }
@@ -32,11 +80,11 @@ export default async function Home() {
   //
   const { data: dispatchData, error: dispatchError } = await supabase
     .from('DispatchArea')
-    .select('Dispatch_ID, DispatchName, FDRA_ID')
+    .select('Dispatch_ID, DispatchName')
 
   const { data: fdraData, error: fdraError } = await supabase
     .from('FDRA')
-    .select('FDRA_ID, FDRAname, BI, ERC')
+    .select('FDRA_ID, FDRAname, BI, ERC, Dispatch_ID')
 
 
     
@@ -52,6 +100,12 @@ export default async function Home() {
       <section className="add-dispatch-section">
         <h2 className="dashboard-heading">Add Dispatch Area</h2>
         <AddDispatchForm />
+      </section>
+
+      {/* Add FDRA Form */}
+      <section className="add-fdra-section">
+        <h2 className="dashboard-heading">Add FDRA</h2>
+        <AddFDRAForm dispatchData={dispatchData} />
       </section>
 
       {/* Dispatch Areas cards */}
@@ -79,7 +133,7 @@ export default async function Home() {
                   </h3>{/*reason for unnamed area ?? vs ||*/}
 
                   <p>Dispatch ID: {dispatchArea.Dispatch_ID}</p>
-                  <p>FDRA ID: {dispatchArea.FDRA_ID}</p>
+                  {/* <p>FDRA ID: {dispatchArea.FDRA_ID}</p> */}
 
                 </div>
               ))}
@@ -113,6 +167,7 @@ export default async function Home() {
                   </h3>
                   <p>BI: {fdra.BI}</p>
                   <p>ERC: {fdra.ERC}</p>
+                  <p>Dispatch ID: {fdra.Dispatch_ID} </p>
                 </div>
               ))}
             </div>
