@@ -1,33 +1,33 @@
-'use server'//
+'use server'
 
+// Import Supabase client for database operations
 import { supabase } from '@/lib/supabase'
-import AddDispatchForm from './components/AddDispatchForm'
-import AddFDRAForm from './components/AddFDRAForm.jsx'
 
-//USE LATER
-// import DispatchAreasSection from './components/DispatchAreasSection'
-// import FdraSection from './components/FdraSection'
-// import StatusSection from './components/StatusSection'
+// Import form components for adding data
+import AddDispatchForm from './components/Dispatch/AddDispatchForm.jsx'
+import AddFDRAForm from './components/FDRA/AddFDRAForm.jsx'
 
-//need new function to add to database
+// Import section components for displaying data
+import DispatchAreasSection from './components/Dispatch/DispatchAreasSection.jsx'
+import FdraSection from './components/FDRA/FdraSection.jsx'
+import StatusSection from './components/StatusSection.jsx'
+
+// Server action to add a new dispatch area to the database
 export async function addDispatchArea(formData) {
-  //form to insert data into supabase table DispatchArea
+  // Extract dispatch name from form data
   const dispatchName = formData.get('dispatchName')
-  //const fdraId = formData.get('FDRA_ID')
-
   
+  // Validate dispatch name is not empty
   if (!dispatchName || dispatchName.trim() === '') {
     return { error: 'Dispatch name is required' }
   }
 
-  // if (!fdraId || isNaN(Number(fdraId))) {
-  //   return { error: 'Valid FDRA ID is required' }
-  // }
-
+  // Insert new dispatch area into Supabase database
   const { data, error } = await supabase
     .from('DispatchArea')
     .insert([{ DispatchName: dispatchName }])
 
+  // Handle database error
   if (error) {
     return { error: error.message }
   }
@@ -35,29 +35,35 @@ export async function addDispatchArea(formData) {
   return { success: true, data }
 }
 
-//function to add FDRA data to database
+// Server action to add FDRA (Fire Danger Rating Area) data to the database
 export async function addFDRAData(formData) {
+  // Extract FDRA form fields
   const FDRAname = formData.get('FDRAname')
-  const BI = formData.get('BI')
-  const ERC = formData.get('ERC')
+  const BI = formData.get('BI') // Build Index
+  const ERC = formData.get('ERC') // Energy Release Component
   const dispatchId = formData.get('dispatchId')
 
+  // Validate FDRA name
   if (!FDRAname || FDRAname.trim() === '') {
     return { error: 'FDRA name is required' }
   }
 
+  // Validate BI (Build Index)
   if (BI === '' || BI === null || (BI !== '' && isNaN(Number(BI)))) {
     return { error: 'Valid BI is required' }
   }
 
+  // Validate ERC (Energy Release Component)
   if (ERC === '' || ERC === null || (ERC !== '' && isNaN(Number(ERC)))) {
     return { error: 'Valid ERC is required' }
   }
 
+  // Validate dispatch area ID
   if (!dispatchId || isNaN(Number(dispatchId))) {
     return { error: 'Dispatch area is required' }
   }
 
+  // Insert FDRA record into Supabase database
   const { data, error } = await supabase
     .from('FDRA')
     .insert([{ 
@@ -67,7 +73,7 @@ export async function addFDRAData(formData) {
       Dispatch_ID: Number(dispatchId) 
     }])
 
-
+  // Handle database error
   if (error) {
     return { error: error.message }
   }
@@ -75,20 +81,24 @@ export async function addFDRAData(formData) {
   return { success: true, data }
 }
 
-//set up a page that fetches data from supabase and displays it using the components above
+/**
+ * Main page component that fetches and displays wildfire data
+ * Fetches dispatch areas and FDRA records from Supabase
+ * Displays forms for adding new data and shows current data in cards
+ */
 export default async function Home() {
-  //
+  // Fetch all dispatch areas from database
+  // Fetch all dispatch areas from database
   const { data: dispatchData, error: dispatchError } = await supabase
     .from('DispatchArea')
     .select('Dispatch_ID, DispatchName')
 
+  // Fetch all FDRA records from database
   const { data: fdraData, error: fdraError } = await supabase
     .from('FDRA')
     .select('FDRA_ID, FDRAname, BI, ERC, Dispatch_ID')
 
-
-    
-
+  // Debug logs (commented out)
   // console.log('DispatchArea data:', dispatchData)
   // console.log('DispatchArea error:', dispatchError)
   // console.log('FDRA data:', fdraData)
@@ -96,7 +106,7 @@ export default async function Home() {
 
   return (
     <main className="dashboard-container">
-      {/* Add Dispatch Area Form */}
+      {/* Add Dispatch Area Form Section */}
       <section className="add-dispatch-section">
         <h2 className="dashboard-heading">Add Dispatch Area</h2>
         <AddDispatchForm />
