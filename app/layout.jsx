@@ -16,6 +16,7 @@ export default function RootLayout({ children }) {
           <Link href="/about"> Who We Are</Link>
           <Link href="/data"> Data</Link>
           <Link href="/learn-more"> Learn More</Link>
+          <Link href="/map"> View Map</Link>
         </nav>
         {children}
         <nav className="nav-Bar-Bottom">
