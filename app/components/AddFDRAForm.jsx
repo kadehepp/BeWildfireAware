@@ -1,7 +1,7 @@
 'use client'//tesll next.js this is a client component
 
 import { useState } from 'react'
-import { addFDRAData } from '../page'
+import { addFDRAData } from '../data/page'
 
 export default function AddFDRAForm({ dispatchData = [] }) {
   const [FDRAname, setFDRAname] = useState('')

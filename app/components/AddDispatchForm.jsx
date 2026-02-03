@@ -1,7 +1,7 @@
 'use client'//tesll next.js this is a client component
 
 import { useState } from 'react'
-import { addDispatchArea } from '../page'
+import { addDispatchArea } from '../data/page'
 
 export default function AddDispatchForm() {
   const [dispatchName, setDispatchName] = useState('')//new state initialized to empty string (useState(''))
