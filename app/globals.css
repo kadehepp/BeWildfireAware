@@ -3,9 +3,15 @@
 body {
   margin: 0;
   font-family: sans-serif;
-  background-color: #ffffff;
-  color: #3b0000;
+  background-color: #FFFFFF;
+  color: #FFF;
+  flex-direction: column;
 }
+html {
+  height: 100%;
+  background-color: #09240f;
+}
+
 
 /* ================= LAYOUT ================= */
 
@@ -13,6 +19,8 @@ body {
   min-height: 100vh;
   padding: 1.5rem;
   background-color: darkgray;
+
+
 }
 
 
@@ -376,4 +384,96 @@ p {
 
 .warning-text {
   color: #92400e;
+}
+
+/* NAV BAR+ Page*/
+
+.page-container {
+  margin: 0px;
+  border-radius: 0px;
+  padding: 25px;
+  min-height: calc(100vh-120px);
+  background-color: #0F2311;
+  flex: 1;
+}
+
+.nav-Bar-Bottom {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  background-color: #0B3D12;
+  padding: 10px;
+  
+  
+  
+}
+.nav-Bar-Top {
+  display: flex;
+  justify-content: right;
+  gap: 25px;
+  background-color: #0B3D12;
+  padding:30px;
+  color:#FFFFFF;
+  text-decoration: none;
+}
+/* Add these rules to target the links */
+.nav-Bar-Top a,
+.nav-Bar-Bottom a {
+  color: #FFFFFF !important; /* Force white color */
+  text-decoration: none; /* Remove underline */
+}
+
+/* Add visited/link states */
+.nav-Bar-Top a:visited,
+.nav-Bar-Bottom a:visited,
+.nav-Bar-Top a:link,
+.nav-Bar-Bottom a:link
+{
+  color: #FFFFFF !important;
+}
+.nav-Bar-Top ul li a:active,
+.nav-Bar-Bottom a:active{
+  color: #FF6600 !important;
+  
+}
+
+.contact-info {
+  text-align: center;
+  padding: 20px;
+  background-color: #0B3D12; /* Same as page container */
+  color: white;
+  margin: 0;
+}
+
+.logo-navbar {
+  position: absolute;
+  left: 15px; /* Position from left edge */
+  top: 0.5%;
+  
+}
+
+/* homepage */
+
+.homepage-header {
+  text-align: center;
+  font-size: larger;
+  padding-top: 100px;
+  padding-bottom: 100px;
+  min-height: 300px;
+  min-width: 300px;
+  color: #fff;
+  background-color: transparent;
+  background: url('/images/backgrndphoto.webp') no-repeat center center/cover !important;
+  position: center;
+  z-index: 1;
+}
+
+
+
+/* map page */
+.map-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
 }
