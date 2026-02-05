@@ -17,11 +17,9 @@ export default function AddDispatchForm() {
     setMessage('')
 
     try {
-      // Create FormData object to send to server
+      // Call server action to add dispatch area
       const formData = new FormData()
       formData.append('dispatchName', dispatchName)
-      
-      // Call server action to add dispatch area
       const result = await addDispatchArea(formData)
 
       // Show error or success message

@@ -1,6 +1,7 @@
 export default function StatusSection({
   dispatchError,
   fdraError,
+  stationError,
 }) {
   // Determine dispatch status based on error
   let dispatchStatus;
@@ -36,6 +37,22 @@ export default function StatusSection({
     };
   }
 
+  //Determin StationRecord status based on error
+  let stationStatus;
+  if (stationError) {
+    stationStatus = {
+      className: 'status-error',
+      message: 'Error',
+      textClass: 'status-text-error'
+    };
+  } else {
+    stationStatus = {
+      className: 'status-success',  
+      message: 'Connected',
+      textClass: 'status-text-success'
+    };
+  }
+
   return (
     <section className="status-section">
       <h2 className="Connection Status">Connection Status</h2>
@@ -56,7 +73,17 @@ export default function StatusSection({
             {fdraStatus.message}
           </p>
         </div>
+
+        {/* StationRecord connection status */}
+        <div className={`status-card ${stationStatus.className}`}>
+          <p className="status-StationRecord">StationRecord</p>
+          <p className={stationStatus.textClass}>
+            {stationStatus.message}
+          </p>
+        </div>
       </div>
     </section>
   );
+
+  
 }

@@ -15,6 +15,9 @@ export default function Navbar() {
             <Link href="/">Home</Link>
           </li>
           <li>
+            <Link href="/csvPreview">CSV Preview</Link>
+          </li>
+          <li>
             <Link href="/about">About Me</Link>
           </li>
         </ul>

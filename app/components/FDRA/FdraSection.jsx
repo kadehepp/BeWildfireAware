@@ -24,8 +24,8 @@ export default function FdraSection({ fdraData, fdraError }) {
               <h3 className="dashboard-subheading">
                 {fdra.FDRAname ?? 'Unnamed FDRA'}
               </h3>
-              <p className="text-black">BI: {fdra.BI}</p>
-              <p className="text-black">ERC: {fdra.ERC}</p>
+              <p className="text-black">AVG_BI: {fdra.AVG_BI}</p>
+              <p className="text-black">AVG_ERC: {fdra.AVG_ERC}</p>
             </div>
           ))}
         </div>

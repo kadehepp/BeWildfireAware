@@ -144,7 +144,8 @@ body {
 }
 
 .status-DispatchArea,
-.status-FDRA {
+.status-FDRA,
+.status-StationRecord {
   font-size: larger;
   margin-top: 0.5rem;
   font-weight: 700;
@@ -173,4 +174,32 @@ body {
 
 p {
   margin: 0.25rem 0;
+}
+/* ================= CSV DISPLAY ================= */
+
+.csv-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 20px;
+	padding: 20px;
+}
+
+.csv-card {
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 16px;
+	background: white;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.csv-row {
+	margin-bottom: 10px;
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+.csv-row strong {
+	display: inline-block;
+	min-width: 120px;
+	color: #333;
 }

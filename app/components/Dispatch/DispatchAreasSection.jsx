@@ -27,9 +27,7 @@ export default function DispatchAreasSection({
               <h3 className="dashboard-subheading">
                 {dispatchArea.DispatchName ?? 'Unnamed Area'}
               </h3>
-
-              <p>Dispatch ID: {dispatchArea.Dispatch_ID} :</p>
-              <p>FDRA ID: {dispatchArea.FDRA_ID}</p>
+              <p>Dispatch ID: {dispatchArea.Dispatch_ID}</p>
             </div>
           ))}
         </div>

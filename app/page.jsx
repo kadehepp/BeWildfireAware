@@ -11,6 +11,7 @@ import AddFDRAForm from './components/FDRA/AddFDRAForm.jsx'
 import DispatchAreasSection from './components/Dispatch/DispatchAreasSection.jsx'
 import FdraSection from './components/FDRA/FdraSection.jsx'
 import StatusSection from './components/StatusSection.jsx'
+import StationSection from './components/Station/StationSection.jsx'
 
 // Server action to add a new dispatch area to the database
 export async function addDispatchArea(formData) {
@@ -39,9 +40,9 @@ export async function addDispatchArea(formData) {
 export async function addFDRAData(formData) {
   // Extract FDRA form fields
   const FDRAname = formData.get('FDRAname')
-  const BI = formData.get('BI') // Build Index
-  const ERC = formData.get('ERC') // Energy Release Component
-  const dispatchId = formData.get('dispatchId')
+  const AVG_BI = formData.get('AVG_BI') // Build Index
+  const AVG_ERC = formData.get('AVG_ERC') // Energy Release Component
+  const dispatchID = formData.get('dispatchID')
 
   // Validate FDRA name
   if (!FDRAname || FDRAname.trim() === '') {
@@ -49,16 +50,16 @@ export async function addFDRAData(formData) {
   }
 
   // Validate BI (Build Index)
-  if (BI === '' || BI === null || (BI !== '' && isNaN(Number(BI)))) {
+  if (AVG_BI === '' || AVG_BI === null || (AVG_BI !== '' && isNaN(Number(AVG_BI)))) {
     return { error: 'Valid BI is required' }
   }
 
   // Validate ERC (Energy Release Component)
-  if (ERC === '' || ERC === null || (ERC !== '' && isNaN(Number(ERC)))) {
+  if (AVG_ERC === '' || AVG_ERC === null || (AVG_ERC !== '' && isNaN(Number(AVG_ERC)))) {
     return { error: 'Valid ERC is required' }
   }
 
-  // Validate dispatch area ID
+  // Validate FDRA ID
   if (!dispatchId || isNaN(Number(dispatchId))) {
     return { error: 'Dispatch area is required' }
   }
@@ -68,9 +69,9 @@ export async function addFDRAData(formData) {
     .from('FDRA')
     .insert([{ 
       FDRAname: FDRAname, 
-      ...(BI && { BI: Number(BI) }),
-      ...(ERC && { ERC: Number(ERC) }),
-      Dispatch_ID: Number(dispatchId) 
+      ...(AVG_BI && { AVG_BI: Number(AVG_BI) }),
+      ...(AVG_ERC && { AVG_ERC: Number(AVG_ERC) }),
+      Dispatch_ID: Number(dispatchID) 
     }])
 
   // Handle database error
@@ -96,8 +97,12 @@ export default async function Home() {
   // Fetch all FDRA records from database
   const { data: fdraData, error: fdraError } = await supabase
     .from('FDRA')
-    .select('FDRA_ID, FDRAname, BI, ERC, Dispatch_ID')
+    .select('FDRA_ID, FDRAname, AVG_BI, AVG_ERC, Dispatch_ID')
 
+  const { data: stationData, error: stationError } = await supabase
+    .from('StationRecord')
+    .select('Record_ID, Station_ID, Station_Name, BI, ERC, FDRA_ID')
+  
   // Debug logs (commented out)
   // console.log('DispatchArea data:', dispatchData)
   // console.log('DispatchArea error:', dispatchError)
@@ -118,93 +123,16 @@ export default async function Home() {
         <AddFDRAForm dispatchData={dispatchData} />
       </section>
 
-      {/* Dispatch Areas cards */}
-      <section className="DispatchArea-section">
-        <h2 className="dashboard-heading">Dispatch Areas</h2>
-        
-        {dispatchError && (
-          <div className="error-message">
-            <p className="error-title">Error with DispatchArea table:</p>
-            <p className="error-body">{dispatchError.message}</p>
-          </div>
-        )}
+      {/* Dispatch Areas Section */}
+      <DispatchAreasSection dispatchData={dispatchData} dispatchError={dispatchError} />
 
-        {!dispatchError && (
-          <div>
-            <p className="record-count">
-              Total Area: {dispatchData?.length ?? 0}
-            </p>  
-
-            <div className="cards-grid">
-              {dispatchData?.map((dispatchArea) => (//reder list of cards if dispatch data exist for each area
-                <div key={dispatchArea.Dispatch_ID} className="area-card">
-                  <h3 className="dashboard-subheading">
-                    {dispatchArea.DispatchName ?? 'Unnamed Area'}
-                  </h3>{/*reason for unnamed area ?? vs ||*/}
-
-                  <p>Dispatch ID: {dispatchArea.Dispatch_ID}</p>
-                  {/* <p>FDRA ID: {dispatchArea.FDRA_ID}</p> */}
-
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* ================= FDRA cards =================*/}
-      <section className="FDRA-section">
-        <h2 className="dashboard-heading">FDRA Records</h2>
-        
-        {fdraError && (
-          <div className="error-message">
-            <p className="error-title">FDRA Error:</p>
-            <p className="error-body">{fdraError.message}</p>
-          </div>
-        )}
-
-        {!fdraError && (
-          <div>
-            <p className="record-count">
-              Total Records: {fdraData?.length ?? 0}
-            </p>
-
-            <div className="cards-grid">
-              {fdraData?.map((fdra) => (
-                <div key={fdra.FDRA_ID} className="area-card">
-                  <h3 className="dashboard-subheading">
-                    {fdra.FDRAname ?? 'Unnamed FDRA'}
-                  </h3>
-                  <p>BI: {fdra.BI}</p>
-                  <p>ERC: {fdra.ERC}</p>
-                  <p>Dispatch ID: {fdra.Dispatch_ID} </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </section>
+      {/* FDRA Section */}
+      <FdraSection fdraData={fdraData} fdraError={fdraError} />
+      {/* Stations Section */}
+      <StationSection stationData={stationData} stationError={stationError} />
 
       {/* Connection Status */}
-      <section className="status-section">
-        <h2 className="dashboard-heading">Connection Status</h2>
-        
-        <div className="status-grid">
-          <div className={`status-card ${dispatchError ? 'status-error' : 'status-success'}`}>
-            <p className="status-DispatchArea">DispatchArea</p>
-            <p className={dispatchError ? 'status-text-error' : 'status-text-success'}>
-              {dispatchError ? 'Error' : 'Connected'}
-            </p>
-          </div>
-
-          <div className={`status-card ${fdraError ? 'status-error' : 'status-success'}`}>
-            <p className="status-FDRA">FDRA</p>
-            <p className={fdraError ? 'status-text-error' : 'status-text-success'}>
-              {fdraError ? 'Error' : 'Connected'}
-            </p>
-          </div>
-        </div>
-      </section>
+      <StatusSection dispatchError={dispatchError} fdraError={fdraError} stationError={stationError} />
     </main>
   )
 } 
