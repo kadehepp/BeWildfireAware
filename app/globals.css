@@ -500,8 +500,9 @@ p {
 	line-height: 1.5;
 }
 
-.csv-row strong {
-	display: inline-block;
-	min-width: 120px;
-	color: #333;
+
+.csv-container,
+.csv-card,
+.csv-row {
+  color: #000;
 }

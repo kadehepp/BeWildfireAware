@@ -157,7 +157,7 @@ export default async function CsvPreviewPage({ searchParams }) {
       {/* Click to save selected columns into the database */}
       <form action={saveCsvToDb}>
         <label>
-          FDRA Area:&nbsp;
+          FDRA Area:
           <select name="fdraID" defaultValue="">
             <option value="">Select one</option>
             {FDRA?.map((area) => (//grab key and name for dropdown
