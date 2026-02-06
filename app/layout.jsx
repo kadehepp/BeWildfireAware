@@ -1,5 +1,7 @@
 import "./globals.css";
 import Link from "next/link";
+import DropDownClient from "./components/dropdown_comp/DropDownClient";
+import { GetDropdownData } from "./components/dropdown_comp/GetDropdownData";
 
 
 export const metadata = {
@@ -7,7 +9,9 @@ export const metadata = {
   description: "Wildfire dispatch and FDRA data management",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+
+  const {data} = await GetDropdownData();
   return (
     <html lang="en">
       <body>
@@ -22,7 +26,9 @@ export default function RootLayout({ children }) {
           <Link href="/data"> Data</Link>
           <Link href="/learn-more"> Learn More</Link>
           <Link href="/map"> View Map</Link>
+          <DropDownClient dispatchData={data} />
         </nav>
+        
         <div className="page-container">
           {children}
         </div>
