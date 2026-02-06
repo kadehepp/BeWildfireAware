@@ -1,7 +1,7 @@
 'use client' // Tell Next.js this is a client component (needs interactivity)
 
 import { useState } from 'react'
-import { addFDRAData } from '../data/../page'
+import { addFDRAData } from '@/app/data/page'
 
 export default function AddFDRAForm({ dispatchData = [] }) {
   // State for all form inputs
