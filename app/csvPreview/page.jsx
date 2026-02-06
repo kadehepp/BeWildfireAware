@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase'
 import { redirect } from 'next/navigation'
 
 // Define which columns to display
-const COLUMNS_TO_SHOW = ['StationId','StationName','BI','ERC','ObservationTime']
+const COLUMNS_TO_SHOW = ['StationId','StationName','BI','ERC','ObservationTime','NFDRType']
 
 // Server action: save selected CSV columns into FDRA table
 async function saveCsvToDb(formData) {
@@ -79,6 +79,7 @@ async function saveCsvToDb(formData) {
         BI: bi,
         ERC: erc,
         Observation_Time: row.ObservationTime,
+        NFDRType: row.NFDRType
       }])
     
     console.log('Insert result:', insertData, 'Error:', insertError)

@@ -101,7 +101,7 @@ export default async function Home() {
 
   const { data: stationData, error: stationError } = await supabase
     .from('StationRecord')
-    .select('Record_ID, Station_ID, Station_Name, BI, ERC, FDRA_ID')
+    .select('Record_ID, Station_ID, Station_Name, BI, ERC, FDRA_ID, NFDRType')
   
   // Debug logs (commented out)
   // console.log('DispatchArea data:', dispatchData)

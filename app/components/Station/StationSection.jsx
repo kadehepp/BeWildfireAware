@@ -27,8 +27,9 @@ export default function StationSection({ stationData, stationError }) {
               <p className="text-black">record: {station.Record_ID}</p>
               <p className="text-black">Station ID: {station.Station_ID}</p>
               <p className="text-black">Station FDRA ID: {station.FDRA_ID}</p>
-              <p className="text-black">AVG_BI: {station.BI}</p>
-              <p className="text-black">AVG_ERC: {station.ERC}</p>
+              <p className="text-black">BI: {station.BI}</p>
+              <p className="text-black">ERC: {station.ERC}</p>
+              <p className="text-black">NFDR Type: {station.NFDRType}</p>
             </div>
           ))}
         </div>
