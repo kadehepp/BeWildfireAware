@@ -1,11 +1,11 @@
-'use client'
+'use client'//tesll next.js this is a client component
 
 import { useState } from 'react'
-import { addDispatchArea } from '../page'
+import { addDispatchArea } from '../data/page'
 
 export default function AddDispatchForm() {
-  const [dispatchName, setDispatchName] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [dispatchName, setDispatchName] = useState('')//new state initialized to empty string (useState(''))
+  const [loading, setLoading] = useState(false)//disable form while submitting
   const [message, setMessage] = useState('')
 
   async function handleSubmit(e) {
@@ -24,9 +24,10 @@ export default function AddDispatchForm() {
       } else {
         setMessage('Dispatch area added successfully!')
         setDispatchName('')
-        // Optionally refresh the page to see new data
+        //// Optionally refresh the page to see new data
         setTimeout(() => window.location.reload(), 1500)
       }
+
     } catch (err) {
       setMessage(`Error: ${err.message}`)
     } finally {
