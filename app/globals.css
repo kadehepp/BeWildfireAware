@@ -508,3 +508,176 @@ p {
 .csv-row {
   color: #000;
 }
+
+/*dropdown :( */
+/* ================= DROPDOWN STYLES ================= */
+
+/* Dropdown Container */
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Trigger Button */
+.dropdown-trigger {
+  background: none;
+  border: none;
+  color: #FFFFFF !important; /* Match navbar text color */
+  font: inherit;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s;
+  text-decoration: none !important;
+}
+
+/* Match the hover state of other navbar links */
+.dropdown-trigger:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Keep white color for visited/active states */
+.dropdown-trigger:visited,
+.dropdown-trigger:link,
+.dropdown-trigger:active {
+  color: #FFFFFF !important;
+}
+
+.dropdown-trigger:active {
+  color: #FF6600 !important; /* Match your active link color */
+}
+
+/* Dropdown Arrow */
+.dropdown-arrow {
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: #FFFFFF;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #0B3D12; /* Match navbar background color */
+  min-width: 280px;
+  max-height: 70vh;
+  overflow-y: auto;
+  border: 1px solid #1a4720; /* Slightly lighter border */
+  border-radius: 4px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  margin-top: 0.25rem;
+}
+
+/* Scrollbar styling for dropdown */
+.dropdown-menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+  background: #0a3511;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+  background: #1a4720;
+  border-radius: 4px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background: #205a28;
+}
+
+/* Dispatch Group */
+.dispatch-group {
+  border-bottom: 1px solid #1a4720;
+}
+
+.dispatch-group:last-child {
+  border-bottom: none;
+}
+
+/* Dispatch Header */
+.dispatch-header {
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  color: #FFFFFF; /* White text */
+  background: #0a3511; /* Slightly darker than navbar */
+  border-bottom: 1px solid #1a4720;
+  font-size: 0.95rem;
+}
+
+/* FDRA List Container */
+.fdra-list {
+  padding: 0.5rem 0;
+  background: #0B3D12; /* Match navbar background */
+}
+
+/* FDRA Links */
+.fdra-link {
+  display: block;
+  padding: 0.6rem 1rem 0.6rem 2rem;
+  color: #E8F5E9 !important; /* Light greenish-white */
+  text-decoration: none !important;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+  font-size: 0.9rem;
+}
+
+/* Match your link color states */
+.fdra-link:visited,
+.fdra-link:link {
+  color: #E8F5E9 !important;
+}
+
+.fdra-link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF !important;
+  border-left-color: #4CAF50; /* Green accent border on hover */
+}
+
+.fdra-link:active {
+  color: #FF6600 !important; /* Match your active link color */
+  background-color: rgba(255, 102, 0, 0.1);
+}
+
+/* Loading/Empty States */
+.dropdown-empty,
+.fdra-empty {
+  padding: 1.5rem;
+  color: #B0BEC5 !important; /* Light gray for empty states */
+  font-style: italic;
+  text-align: center;
+  background: #0B3D12;
+}
+
+/* No FDRAs message */
+.fdra-empty {
+  padding: 0.75rem 1rem;
+  color: #90A4AE !important;
+  font-size: 0.85rem;
+}
+
+/* ================= RESPONSIVE DROPDOWN ================= */
+
+@media (max-width: 768px) {
+  .dropdown-menu {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90vw;
+    max-width: 300px;
+    max-height: 60vh;
+  }
+  
+  .dropdown-trigger {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+}
