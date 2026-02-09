@@ -6,9 +6,9 @@ import { addFDRAData } from '@/app/data/page'
 export default function AddFDRAForm({ dispatchData = [] }) {
   // State for all form inputs
   const [FDRAname, setFDRAname] = useState('')
-  const [BI, setBI] = useState('') // Build Index
-  const [ERC, setERC] = useState('') // Energy Release Component
-  const [dispatchId, setDispatchId] = useState('')
+  const [AVG_BI, setAVG_BI] = useState('') // Build Index
+  const [AVG_ERC, setAVG_ERC] = useState('') // Energy Release Component
+  const [Dispatch_ID, setDispatchId] = useState('')
   // State to disable form while submitting
   const [loading, setLoading] = useState(false)
   // State to show success/error messages
@@ -23,9 +23,9 @@ export default function AddFDRAForm({ dispatchData = [] }) {
       // Create FormData object to send to server
       const formData = new FormData()
       formData.append('FDRAname', FDRAname)
-      formData.append('BI', BI)
-      formData.append('ERC', ERC)
-      formData.append('dispatchId', dispatchId)
+      formData.append('AVG_BI', AVG_BI)
+      formData.append('AVG_ERC', AVG_ERC)
+      formData.append('Dispatch_ID', Dispatch_ID)
       // Call server action to add FDRA data
       const result = await addFDRAData(formData)
 
@@ -36,8 +36,8 @@ export default function AddFDRAForm({ dispatchData = [] }) {
         setMessage('FDRA data added successfully!')
         // Clear all inputs
         setFDRAname('')
-        setBI('')
-        setERC('')
+        setAVG_BI('')
+        setAVG_ERC('')
         setDispatchId('')
         // Refresh page after 1.5 seconds to show new data
         setTimeout(() => window.location.reload(), 1500)
@@ -65,29 +65,29 @@ export default function AddFDRAForm({ dispatchData = [] }) {
       <input
         type="number"
         placeholder="Enter BI"
-        value={BI}
-        onChange={(e) => setBI(e.target.value)}
+        value={AVG_BI}
+        onChange={(e) => setAVG_BI(e.target.value)}
         disabled={loading}
       />
       {/* Energy Release Component input */}
       <input
         type="number"
         placeholder="Enter ERC"
-        value={ERC}
-        onChange={(e) => setERC(e.target.value)}
+        value={AVG_ERC}
+        onChange={(e) => setAVG_ERC(e.target.value)}
         disabled={loading}
       />
       {/* Dropdown to select dispatch area */}
       <select 
-        value={dispatchId} 
+        value={Dispatch_ID} 
         onChange={(e) => setDispatchId(e.target.value)}
         disabled={loading}
         required
       >
         <option value="">Select Dispatch Area</option>
-        {dispatchData?.map((dispatch) => (
-          <option key={dispatch.Dispatch_ID} value={dispatch.Dispatch_ID}>
-            {dispatch.DispatchName}
+        {dispatchData?.map((dispatchArea) => (
+          <option key={dispatchArea.Dispatch_ID} value={dispatchArea.Dispatch_ID}>
+            {dispatchArea.DispatchName}
           </option>
         ))}
       </select>
