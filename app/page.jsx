@@ -1,293 +1,97 @@
-'use server'
+'use client'
 
+import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import AddDispatchForm from './components/AddDispatchForm'
 
-//USE LATER
-// import DispatchAreasSection from './components/DispatchAreasSection'
-// import FdraSection from './components/FdraSection'
-// import StatusSection from './components/StatusSection'
+export default function Home() {
+  const [dispatchData, setDispatchData] = useState([])
+  const [fdraData, setFdraData] = useState([])
+  const [dispatchError, setDispatchError] = useState(null)
+  const [fdraError, setFdraError] = useState(null)
+  const [selectedDispatch, setSelectedDispatch] = useState(null)
 
-export async function addDispatchArea(formData) {
-  const dispatchName = formData.get('dispatchName')
-  
-  if (!dispatchName || dispatchName.trim() === '') {
-    return { error: 'Dispatch name is required' }
-  }
+  // Fetch DispatchArea data
+  useEffect(() => {
+    const fetchDispatch = async () => {
+      const { data, error } = await supabase
+        .from('DispatchArea')
+        .select('Dispatch_ID, DispatchName')
+      setDispatchData(data ?? [])
+      setDispatchError(error)
+    }
+    fetchDispatch()
+  }, [])
 
-  const { data, error } = await supabase
-    .from('DispatchArea')
-    .insert([{ DispatchName: dispatchName }])
-    .select('Dispatch_ID, DispatchName, FDRA_ID')
+  // Fetch FDRA data
+  // Fetch FDRA data
+  useEffect(() => {
+    const fetchFdra = async () => {
+      const { data, error } = await supabase
+        .from('FDRA')
+        .select('FDRA_ID, FDRAname, AVG_BI, AVG_ERC, Dispatch_ID') // <-- add Dispatch_ID
+      setFdraData(data ?? [])
+      setFdraError(error)
+    }
+    fetchFdra()
+  }, [])
 
-  if (error) {
-    return { error: error.message }
-  }
+  // Filtered DispatchArea JSX
+  const renderDispatchCards = () => {
+  if (dispatchError) return <p>Error loading Dispatch Areas: {dispatchError.message}</p>
+  if (!selectedDispatch) return <p>Please select a Dispatch Area.</p>
 
-  return { success: true, data }
-}
-
-//set up a page that fetches data from supabase and displays it using the components above
-export default async function Home() {
-  //
-  const { data: dispatchData, error: dispatchError } = await supabase
-    .from('DispatchArea')
-    .select('Dispatch_ID, DispatchName, FDRA_ID')
-
-  const { data: fdraData, error: fdraError } = await supabase
-    .from('FDRA')
-    .select('FDRA_ID, FDRAname, BI, ERC')
-
-
-    
-
-  // console.log('DispatchArea data:', dispatchData)
-  // console.log('DispatchArea error:', dispatchError)
-  // console.log('FDRA data:', fdraData)
-  // console.log('FDRA error:', fdraError)
+  const filtered = dispatchData.filter(area => area.Dispatch_ID == selectedDispatch)
+  if (filtered.length === 0) return <p>No Dispatch Area found for this ID</p>
 
   return (
-    <main className="dashboard-container">
-      {/* Add Dispatch Area Form */}
-      <section className="add-dispatch-section">
-        <h2 className="dashboard-heading">Add Dispatch Area</h2>
-        <AddDispatchForm />
-      </section>
-
-      {/* Dispatch Areas cards */}
-      <section className="DispatchArea-section">
-        <h2 className="dashboard-heading">Dispatch Areas</h2>
-        
-        {dispatchError && (
-          <div className="error-message">
-            <p className="error-title">Error with DispatchArea table:</p>
-            <p className="error-body">{dispatchError.message}</p>
-          </div>
-        )}
-
-        {!dispatchError && (
-          <div>
-            <p className="record-count">
-              Total Area: {dispatchData?.length ?? 0}
-            </p>  
-
-            <div className="cards-grid">
-              {dispatchData?.map((dispatchArea) => (//reder list of cards if dispatch data exist for each area
-                <div key={dispatchArea.Dispatch_ID} className="area-card">
-                  <h3 className="dashboard-subheading">
-                    {dispatchArea.DispatchName ?? 'Unnamed Area'}
-                  </h3>{/*reason for unnamed area ?? vs ||*/}
-
-                  <p>Dispatch ID: {dispatchArea.Dispatch_ID}</p>
-                  <p>FDRA ID: {dispatchArea.FDRA_ID}</p>
-
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* ================= FDRA cards =================*/}
-      <section className="FDRA-section">
-        <h2 className="dashboard-heading">FDRA Records</h2>
-        
-        {fdraError && (
-          <div className="error-message">
-            <p className="error-title">FDRA Error:</p>
-            <p className="error-body">{fdraError.message}</p>
-          </div>
-        )}
-
-        {!fdraError && (
-          <div>
-            <p className="record-count">
-              Total Records: {fdraData?.length ?? 0}
-            </p>
-
-            <div className="cards-grid">
-              {fdraData?.map((fdra) => (
-                <div key={fdra.FDRA_ID} className="area-card">
-                  <h3 className="dashboard-subheading">
-                    {fdra.FDRAname ?? 'Unnamed FDRA'}
-                  </h3>
-                  <p>BI: {fdra.BI}</p>
-                  <p>ERC: {fdra.ERC}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* Connection Status */}
-      <section className="status-section">
-        <h2 className="dashboard-heading">Connection Status</h2>
-        
-        <div className="status-grid">
-          <div className={`status-card ${dispatchError ? 'status-error' : 'status-success'}`}>
-            <p className="status-DispatchArea">DispatchArea</p>
-            <p className={dispatchError ? 'status-text-error' : 'status-text-success'}>
-              {dispatchError ? 'Error' : 'Connected'}
-            </p>
-          </div>
-
-          <div className={`status-card ${fdraError ? 'status-error' : 'status-success'}`}>
-            <p className="status-FDRA">FDRA</p>
-            <p className={fdraError ? 'status-text-error' : 'status-text-success'}>
-              {fdraError ? 'Error' : 'Connected'}
-            </p>
-          </div>
+    <div className="cards-grid">
+      {filtered.map(area => (
+        <div key={area.Dispatch_ID} className="area-card">
+          <h3 className="dashboard-subheading">{area.DispatchName ?? 'Unnamed Area'}</h3>
+          <p>Dispatch ID: {area.Dispatch_ID}</p>
         </div>
-      </section>
-    </main>
-  )
-} 
-
-
-
-
-
-
-
-
-
-
-
-
-// import DispatchAreasSection from './components/DispatchAreasSection'
-// import FdraSection from './components/FdraSection'
-// import StatusSection from './components/StatusSection'
-// import type { DispatchArea, FDRARecord } from './types'
-
-
-
-
-
-
-
-{/* --- IGNORE --- */}
-/*
-
-
-{/*      
-      {/* ================= FDRA TABLE ================= 
-      <section className="FDRA-section">
-        <h2 className="dashboard-heading">FDRA Records</h2>
-        
-        {fdraError && (
-          <div className="error-message">
-            <p className="error-title">FDRA Error</p>
-            <p className="error-body">{fdraError.message}</p>
-          </div>
-        )}
-
-        {!fdraError && (
-          <div>
-            <p className="record-count">
-              Total Records: {fdraData?.length ?? 0}
-            </p>
-
-            <div className="cards-grid">
-              {fdraData?.map((fdra) => (
-                <div key={fdra.FDRA_ID} className="area-card">
-                  <h3 className="dashboard-subheading">
-                    {fdra.FDRAname ?? 'Unnamed FDRA'}
-                  </h3>
-                  <p className="text-black">BI: {fdra.BI}</p>
-                  <p className="text-black">ERC: {fdra.ERC}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* FDRA Data Section       <section>
-        <h2 className="dashboard-heading">FDRA Data</h2>
-        
-        {fdraError ? (
-          <div className="error-message">
-            <p className="error-title text-black">Error with FDRA table:</p>
-            <p className="error-body">{fdraError.message}</p>
-          </div>
-        ) : (
-          <div>
-            <p className="text-black mb-2">Found {fdraData?.length || 0} FDRA records</p>
-            
-            {fdraData && fdraData.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      {fdraData[0] && Object.keys(fdraData[0]).map(key => (
-                        <th key={key}>{key}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {fdraData.map((record: any, index: number) => (
-                      <tr key={record.FDRA_ID || index}>
-                        {Object.values(record).map((value: any, i: number) => (
-                          <td key={i}>{String(value)}</td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="warning-message">
-                <p className="warning-text">FDRA table exists but has no data.</p>
-              </div>
-            )}
-          </div>
-        )}
-      </section>
-/*}
-
-          </div>
-
-          <div className={`status-card ${fdraError ? 'status-error' : 'status-success'}`}>
-            <p className="font-medium text-black">FDRA Table:</p>
-            <p className={`text-lg font-bold ${fdraError ? 'status-text-error' : 'status-text-success'}`}>
-              {fdraError ? '❌ Error' : '✅ Connected'}
-            </p>
-            <p className="text-black">Records: {fdraData?.length || 0}</p>
-            {fdraError && (
-              <p className="text-sm text-red-600 mt-2">{fdraError.message}</p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Data Summary 
-      <div className="bg-gray-50 p-6 rounded-lg border border-gray-300 mt-8">
-        <h2 className="dashboard-heading text-black">Data Summary</h2>
-        <div className="summary-grid">
-          <div className="summary-card">
-            <p className="text-sm text-gray-600">Total Areas</p>
-            <p className="text-2xl font-bold text-black">{dispatchData?.length || 0}</p>
-          </div>
-          <div className="summary-card">
-            <p className="text-sm text-gray-600">FDRA Records</p>
-            <p className="text-2xl font-bold text-black">{fdraData?.length || 0}</p>
-          </div>
-          <div className="summary-card">
-            <p className="text-sm text-gray-600">Status</p>
-            <p className="text-2xl font-bold text-green-600">
-              {dispatchError || fdraError ? 'Error' : 'Active'}
-            </p>
-          </div>
-          <div className="summary-card">
-            <p className="text-sm text-gray-600">Last Updated</p>
-            <p className="text-lg font-semibold text-black">
-              {new Date().toLocaleDateString()}
-            </p>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   )
 }
-*/
+
+  return (
+    <main className="dashboard-container">
+      {/* Dispatch Areas */}
+      <section className="DispatchArea-section">
+        <h2 className="dashboard-heading">Dispatch Areas</h2>
+        <button onClick={() => setSelectedDispatch(1)}>Montrose</button>
+        <button onClick={() => setSelectedDispatch(2)}>Grand Junction</button>
+        <button onClick={() => setSelectedDispatch(3)}>Durango</button>
+
+        {renderDispatchCards()}
+      </section>
+
+      {/* FDRA Records */}
+        <section className="FDRA-section">
+          <h2 className="dashboard-heading">FDRA Records</h2>
+
+          {fdraError ? (
+            <div className="error-message">
+              <p className="error-title">FDRA Error:</p>
+              <p className="error-body">{fdraError.message}</p>
+            </div>
+          ) : !selectedDispatch ? (
+            <p>Please select a Dispatch Area to see FDRA records.</p>
+          ) : (
+            <div className="cards-grid">
+            {fdraData
+              .filter(fdra => fdra.Dispatch_ID == selectedDispatch)
+              .map(fdra => (
+                <div key={fdra.FDRA_ID} className="area-card">
+                  <h3 className="dashboard-subheading">{fdra.FDRAname ?? 'Unnamed FDRA'}</h3>
+                  <p>BI: {fdra.AVG_BI}</p>
+                  <p>ERC: {fdra.AVG_ERC}</p>
+                </div>
+            ))}
+          </div>
+          )}
+        </section>
+    </main>
+  )
+}
