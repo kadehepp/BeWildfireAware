@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase'
 // Import form components for adding data
 import AddDispatchForm from '../components/Dispatch/AddDispatchForm.jsx'
 import AddFDRAForm from '../components/FDRA/AddFDRAForm.jsx'
+import ClientStationSearch from '../components/Dynamic_Fetch/clientStationSearch.jsx'
 
 // Import section components for displaying data
 import DispatchAreasSection from '../components/Dispatch/DispatchAreasSection.jsx'
@@ -122,6 +123,12 @@ export default async function Home() {
         <h2 className="dashboard-heading">Add FDRA</h2>
         <AddFDRAForm dispatchData={dispatchData} />
       </section>
+
+      <section className="add-station-section">
+        <h2 className="dashboard-heading">Add Station Data</h2>
+        <ClientStationSearch />
+      </section>
+      
 
       {/* Dispatch Areas Section */}
       <DispatchAreasSection dispatchData={dispatchData} dispatchError={dispatchError} />
