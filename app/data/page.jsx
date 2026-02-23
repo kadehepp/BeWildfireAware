@@ -43,7 +43,7 @@ export async function addFDRAData(formData) {
   const FDRAname = formData.get('FDRAname')
   const AVG_BI = formData.get('AVG_BI') // Build Index
   const AVG_ERC = formData.get('AVG_ERC') // Energy Release Component
-  const dispatchID = formData.get('dispatchID')
+  const Dispatch_ID = formData.get('Dispatch_ID')
 
   // Validate FDRA name
   if (!FDRAname || FDRAname.trim() === '') {
@@ -51,17 +51,17 @@ export async function addFDRAData(formData) {
   }
 
   // Validate BI (Build Index)
-  if (AVG_BI === '' || AVG_BI === null || (AVG_BI !== '' && isNaN(Number(AVG_BI)))) {
+  if (AVG_BI === '' || AVG_BI === null ) {
     return { error: 'Valid BI is required' }
   }
 
   // Validate ERC (Energy Release Component)
-  if (AVG_ERC === '' || AVG_ERC === null || (AVG_ERC !== '' && isNaN(Number(AVG_ERC)))) {
+  if (AVG_ERC === '' || AVG_ERC === null ) {
     return { error: 'Valid ERC is required' }
   }
 
   // Validate FDRA ID
-  if (!dispatchId || isNaN(Number(dispatchId))) {
+  if (!Dispatch_ID || isNaN(Number(Dispatch_ID))) {
     return { error: 'Dispatch area is required' }
   }
 
@@ -72,7 +72,7 @@ export async function addFDRAData(formData) {
       FDRAname: FDRAname, 
       ...(AVG_BI && { AVG_BI: Number(AVG_BI) }),
       ...(AVG_ERC && { AVG_ERC: Number(AVG_ERC) }),
-      Dispatch_ID: Number(dispatchID) 
+      Dispatch_ID: Number(Dispatch_ID) 
     }])
 
   // Handle database error
