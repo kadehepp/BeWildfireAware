@@ -3,7 +3,7 @@
     "crons": [
         {
             "path": "/api/cron/update-Stations",
-            "schedule": "33 13 * * *" 
+            "schedule": "36 13 * * *" 
         }
     ]
 }
