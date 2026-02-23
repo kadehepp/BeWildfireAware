@@ -122,7 +122,7 @@ async function storeCsvData(csvRows) {
 
             console.log(`Mapped: ${stationName}->ID: ${dbRow.Station_ID}`)
         } else { 
-            console.error(`Could not find Station_ID for name: "${stationName}"`)
+            console.error(`Could not find Station_ID for name: "${stationName}"`) //this prints many time
             
         }
         
@@ -237,7 +237,9 @@ export async function buildCsvStoreData() {
 	//sort all rows by ObservationTime descending, 
 	allRows.sort((a,b)=>b.ObservationTime.localeCompare(a.ObservationTime))
 	console.log('Total rows fetched across all fuel models:', allRows.length)
-	await storeCsvData(allColumnNames, allRows) //store in supabase for later
+	console.log('allRows sample:', allRows.slice(0, 2))
+	console.log('allColumnNames:', allColumnNames)
+	await storeCsvData(allRows) //store in supabase for later
 	return { rows: allRows, columnNames: allColumnNames, summary: { totalRows: allRows.length } }
 }
 
