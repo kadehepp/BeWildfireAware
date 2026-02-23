@@ -25,13 +25,13 @@ export async function stationSearch(formData) {
     // Get date range - last 3 days of data
     const today = new Date();
     const threeDaysAgo = new Date(today);
-    threeDaysAgo.setDate(today.getDate() - 0); // Get data from last 3 days
+    threeDaysAgo.setDate(today.getDate() - 0); // Get dat
 
     // Format dates (YYYY-MM-DD)
     const threeDaysAgoStr = threeDaysAgo.toISOString().split('T')[0];
     const todayStr = today.toISOString().split('T')[0];
 
-    // Construct URL - FIXED: Use backticks for template literal
+    // Construct URL
     const url = `${baseurl}?dataset=all&startDate=${threeDaysAgoStr}&endDate=${todayStr}&dataFormat=csv&stationIds=${stationId}`;
     
     console.log('Fetching URL:', url); // Debug log
