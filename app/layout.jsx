@@ -1,4 +1,4 @@
-import "./globals.css";
+import "./layouts/globals.css";
 import Link from "next/link";
 import DropDownClient from "./components/dropdown_comp/DropDownClient";
 import { GetDropdownData } from "./components/dropdown_comp/GetDropdownData";

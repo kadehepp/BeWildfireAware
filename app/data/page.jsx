@@ -112,26 +112,20 @@ export default async function Home() {
 
   return (
     <main className="dashboard-container">
-      {/* Add Dispatch Area Form Section */}
+      {/* Add Dispatch Area Form Section
       <section className="add-dispatch-section">
         <h2 className="dashboard-heading">Add Dispatch Area</h2>
         <AddDispatchForm />
       </section>
-
-      {/* Add FDRA Form */}
+      
+      Add FDRA Form
       <section className="add-fdra-section">
         <h2 className="dashboard-heading">Add FDRA</h2>
         <AddFDRAForm dispatchData={dispatchData} />
       </section>
 
-      <section className="add-station-section">
-        <h2 className="dashboard-heading">Add Station Data</h2>
-        <ClientStationSearch />
-      </section>
-      
-
-      {/* Dispatch Areas Section */}
-      <DispatchAreasSection dispatchData={dispatchData} dispatchError={dispatchError} />
+      Dispatch Areas Section
+      <DispatchAreasSection dispatchData={dispatchData} dispatchError={dispatchError} />*/}
 
       {/* FDRA Section */}
       <FdraSection fdraData={fdraData} fdraError={fdraError} />
