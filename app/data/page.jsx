@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase'
 // Import form components for adding data
 import AddDispatchForm from '../components/Dispatch/AddDispatchForm.jsx'
 import AddFDRAForm from '../components/FDRA/AddFDRAForm.jsx'
+import ClientStationSearch from '../components/Dynamic_Fetch/clientStationSearch.jsx'
 
 // Import section components for displaying data
 import DispatchAreasSection from '../components/Dispatch/DispatchAreasSection.jsx'
